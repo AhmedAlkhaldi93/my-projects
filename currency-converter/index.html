@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CURRENCY CONVERTER</title>
+    <script src="currency-con.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>CURRENCY CONVERTER</h1>
+
+    <!-- Form to insert a new currency rate -->
+    <form>
+        <h2>Add New Currency Rate</h2>
+        <div id="currency-rate" class="input-currency">
+            <input type="text" id="currency-from" placeholder="From (e.g., USD)" required>
+            <input type="text" id="currency-to" placeholder="From (e.g., EUR)" required>
+        </div>
+        <input type="number" step="any" id="rate" placeholder="Rate" required>
+        <button id="add-rate">Add rate</button>
+    </form>
+
+    <!-- Convert Currency -->
+    <form>
+        <h2>Convert Currency</h2>
+        <div id="currency-convert" class="input-currency">
+            <input type="text" id="from-currency" placeholder="From (e.g., USD)" required>
+            <input type="text" id="to-currency" placeholder="From (e.g., EUR)" required>    
+        </div>
+        <input type="number" step="any" id="amount" placeholder="Amount" required>
+        <button id="convert">Convert</button>
+    </form>
+
+    <!-- Market Watch Table -->
+    <div id="market-watch">
+        <h2>Currency Rates</h2>
+        <input type="search" id="search-rate" placeholder="Search currency..">
+        <table id="rates-table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Rate</th>
+                </tr>
+            </thead>
+            <tbody id="addRateTable">
+                <!-- I will insert my new rates here -->
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>
