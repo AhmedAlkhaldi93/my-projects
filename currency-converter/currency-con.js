@@ -105,5 +105,4 @@ searchRate.addEventListener("keyup", function() {
         }
 
     }
-    
 });
