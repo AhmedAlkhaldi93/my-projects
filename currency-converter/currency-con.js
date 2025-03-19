@@ -6,18 +6,17 @@ const addNewRateTable = document.getElementById("addRateTable");
 const marketWatch = [];
 
 
-function printTable(){                    // This function refresh my rates table
+function printTable(table){                    // This function refresh my rates table
     addNewRateTable.innerHTML = "";
-    for(let i=0; i < marketWatch.length; i++){
-        const numberOfRates = Object.keys(marketWatch[i].rates).length;
+    for(let i=0; i < table.length; i++){
+        const numberOfRates = Object.keys(table[i].rates).length;
         for(let x=0; x < numberOfRates; x++){
             const addRowTable = document.createElement("tr");
-            const key = Object.keys(marketWatch[i].rates)[x];
-            addRowTable.innerHTML = `<td>${marketWatch[i].base}</td><td>${key}</td><td>${marketWatch[i].rates[key]}</td>`;
+            const key = Object.keys(table[i].rates)[x];
+            addRowTable.innerHTML = `<td>${table[i].base}</td><td>${key}</td><td>${table[i].rates[key]}</td>`;
             addNewRateTable.appendChild(addRowTable);
         }
     }
-
 }
 
 
@@ -39,7 +38,7 @@ clickAddRate.addEventListener("click", function(event){
             firstAddRateName.value = "";
             secondAddRateName.value = "";
             rateValue.value = "";
-            return printTable();
+            return printTable(marketWatch);
         }
     }
 
@@ -54,7 +53,7 @@ clickAddRate.addEventListener("click", function(event){
     firstAddRateName.value = "";
     secondAddRateName.value = "";
     rateValue.value = "";
-    return printTable();
+    return printTable(marketWatch);
 
 });
 
@@ -90,19 +89,42 @@ clickConvert.addEventListener("click", function(event){
 
 
 // Search for a currency pair
+
+// searchRate.addEventListener("keyup", function() {
+//     const searchValue = searchRate.value.toUpperCase().trim();
+//     const tr = addNewRateTable.getElementsByTagName("tr");
+    
+//     for(let i=0; i < tr.length; i++){
+//         const td1 = tr[i].getElementsByTagName("td")[0];
+//         const td2 = tr[i].getElementsByTagName("td")[1];
+
+//         if(searchValue === td1.textContent || searchValue === td2.textContent || searchValue === ""){
+//             tr[i].style.display = "";                     // Show the row
+//         }else{
+//             tr[i].style.display = "none";
+//         }
+//     }
+// });
+
+
+
+
+// Search rates using map & filter functions
+
 searchRate.addEventListener("keyup", function() {
     const searchValue = searchRate.value.toUpperCase().trim();
-    const tr = addNewRateTable.getElementsByTagName("tr");
-    
-    for(let i=0; i < tr.length; i++){
-        const td1 = tr[i].getElementsByTagName("td")[0];
-        const td2 = tr[i].getElementsByTagName("td")[1];
+    if(searchValue === ""){
+        return printTable(marketWatch);
+    }else{
+    const searchArray = marketWatch.map(entry => ({             // To return object we should use ({...})
+        base: entry.base,
+        date: entry.date,
+        rates: Object.fromEntries( // .fromEntries -> Change array to object   and   .entries -> change object to array [key, value]
+            Object.entries(entry.rates).filter(([key]) => key.includes(searchValue) || entry.base.includes(searchValue))
+        )
+    })).filter(entry => Object.keys(entry.rates).length > 0);
 
-        if(searchValue === td1.textContent || searchValue === td2.textContent || searchValue === ""){
-            tr[i].style.display = "";                     // Show the row
-        }else{
-            tr[i].style.display = "none";
-        }
-
+    return printTable(searchArray);
     }
 });
+
