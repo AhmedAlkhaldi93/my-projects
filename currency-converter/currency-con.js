@@ -111,20 +111,30 @@ clickConvert.addEventListener("click", function(event){
 
 // Search rates using map & filter functions
 
-searchRate.addEventListener("keyup", function() {
-    const searchValue = searchRate.value.toUpperCase().trim();
-    if(searchValue === ""){
-        return printTable(marketWatch);
-    }else{
-    const searchArray = marketWatch.map(entry => ({             // To return object we should use ({...})
-        base: entry.base,
-        date: entry.date,
-        rates: Object.fromEntries( // .fromEntries -> Change array to object   and   .entries -> change object to array [key, value]
-            Object.entries(entry.rates).filter(([key]) => key.includes(searchValue) || entry.base.includes(searchValue))
-        )
-    })).filter(entry => Object.keys(entry.rates).length > 0);
+// searchRate.addEventListener("keyup", function() {
+//     const searchValue = searchRate.value.toUpperCase().trim();
+//     if(searchValue === ""){
+//         return printTable(marketWatch);
+//     }else{
+//     const searchArray = marketWatch.map(entry => ({             // To return object we should use ({...})
+//         base: entry.base,
+//         date: entry.date,
+//         rates: Object.fromEntries( // .fromEntries -> Change array to object   and   .entries -> change object to array [key, value]
+//             Object.entries(entry.rates).filter(([key]) => key.includes(searchValue) || entry.base.includes(searchValue))
+//         )
+//     })).filter(entry => Object.keys(entry.rates).length > 0);
 
-    return printTable(searchArray);
+//     return printTable(searchArray);
+//     }
+// });
+
+searchRate.addEventListener("keyup", () => {
+    const searchValue = searchRate.value.toUpperCase().trim();
+    if (searchValue === "") {
+        printTable(marketWatch);
+        return;  
+    }else{
+        const searchArray = marketWatch.filter(entry => entry.base === searchValue || Object.keys(entry.rates).some(key => key === searchValue));
+        printTable(searchArray);
     }
 });
-
