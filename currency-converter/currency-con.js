@@ -24,13 +24,19 @@ function printTable(table){                    // This function refresh my rates
 clickAddRate.addEventListener("click", function(event){
     event.preventDefault(); // When I click on the button by default the browser will refresh the page so this line will cancel the default browser operation
     const firstAddRateName = document.getElementById("currency-from");
-    const text1 = firstAddRateName.value.toUpperCase(); // The first currency name
+    const text1 = firstAddRateName.value.toUpperCase().trim(); // The first currency name
     const secondAddRateName = document.getElementById("currency-to");
-    const text2 = secondAddRateName.value.toUpperCase(); // The second currency name
+    const text2 = secondAddRateName.value.toUpperCase().trim(); // The second currency name
     const rateValue = document.getElementById("rate");
     const rateValueIs = Number(rateValue.value); // The rate value
     const theDate = new Date().toLocaleDateString('en-GB');
 
+
+    if (!text1 || !text2 || !rateValueIs) {      // here we check if all required fields are filled or not
+        alert("Please enter all required fields!");
+        return; 
+    }
+    
     for(let i=0; i < marketWatch.length; i++){   // check if the first currency is exist or not
         if(marketWatch[i].base === text1){   
             marketWatch[i].rates[text2] = rateValueIs;
@@ -62,11 +68,16 @@ clickAddRate.addEventListener("click", function(event){
 clickConvert.addEventListener("click", function(event){
     event.preventDefault(); // When I click on the button by default the browser will refresh the page so this line will cancel the default browser operation
     const firstCurrency = document.getElementById("from-currency");
-    const firstCurValue = firstCurrency.value.toUpperCase(); // The first currency name
+    const firstCurValue = firstCurrency.value.toUpperCase().trim(); // The first currency name
     const secondCurrency = document.getElementById("to-currency");
-    const secondCurValue = secondCurrency.value.toUpperCase(); // The second currency name
+    const secondCurValue = secondCurrency.value.toUpperCase().trim(); // The second currency name
     const amountId = document.getElementById("amount");
     const amount = Number(amountId.value);
+
+    if (!firstCurValue || !secondCurValue || !amount) {      // here we check if all required fields are filled or not
+        alert("Please enter all required fields!");
+        return; 
+    }
 
     for(let i=0; i < marketWatch.length; i++){
         let totalAmount = undefined;
@@ -98,7 +109,7 @@ clickConvert.addEventListener("click", function(event){
 //         const td1 = tr[i].getElementsByTagName("td")[0];
 //         const td2 = tr[i].getElementsByTagName("td")[1];
 
-//         if(searchValue === td1.textContent || searchValue === td2.textContent || searchValue === ""){
+//         if(td1.textContent.includes(searchValue) || td2.textContent.includes(searchValue) || searchValue === ""){
 //             tr[i].style.display = "";                     // Show the row
 //         }else{
 //             tr[i].style.display = "none";
@@ -128,13 +139,29 @@ clickConvert.addEventListener("click", function(event){
 //     }
 // });
 
+
+// Search rates using forEach()
+
 searchRate.addEventListener("keyup", () => {
     const searchValue = searchRate.value.toUpperCase().trim();
+
     if (searchValue === "") {
         printTable(marketWatch);
-        return;  
-    }else{
-        const searchArray = marketWatch.filter(entry => entry.base === searchValue || Object.keys(entry.rates).some(key => key === searchValue));
-        printTable(searchArray);
+        return;  // return to avoid use of else {} block (reduces indentation)
     }
+
+    const matchingRates = [];
+    marketWatch.forEach(item => {
+        const ratesAsArray = Object.entries(item.rates);
+        ratesAsArray.forEach((rate) => {
+            if (item.base.includes(searchValue) || rate[0].includes(searchValue)) {
+                matchingRates.push({
+                    base: item.base,
+                    date: item.date,
+                    rates: { [rate[0]]: rate[1] }
+                });
+            }
+        })
+    });
+    printTable(matchingRates);
 });
