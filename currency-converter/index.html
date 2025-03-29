@@ -9,32 +9,35 @@
 </head>
 <body>
     <h1>CURRENCY CONVERTER</h1>
+<div class="mainDiv">
 
-    <!-- Form to insert a new currency rate -->
-    <form>
-        <h2>Add New Currency Rate</h2>
-        <div id="currency-rate" class="input-currency">
-            <input type="text" id="currency-from" placeholder="From (e.g., USD)" required>
-            <input type="text" id="currency-to" placeholder="From (e.g., EUR)" required>
-        </div>
-        <input type="number" step="any" id="rate" placeholder="Rate" required>
-        <button id="add-rate">Add rate</button>
-    </form>
+    <div class="firstDiv">
+        <!-- Form to insert a new currency rate -->
+        <form>
+            <h2>Add New Currency Rate</h2>
+            <div id="currency-rate" class="input-currency">
+                <input type="text" id="currency-from" placeholder="From (e.g., USD)" required>
+                <input type="text" id="currency-to" placeholder="From (e.g., EUR)" required>
+            </div>
+            <input type="number" step="any" id="rate" placeholder="Rate" required>
+            <button id="add-rate">Add rate</button>
+        </form>
 
-    <!-- Convert Currency -->
-    <form>
-        <h2>Convert Currency</h2>
-        <div id="currency-convert" class="input-currency">
-            <input type="text" id="from-currency" placeholder="From (e.g., USD)" required>
-            <input type="text" id="to-currency" placeholder="From (e.g., EUR)" required>    
-        </div>
-        <input type="number" step="any" id="amount" placeholder="Amount" required>
-        <button id="convert">Convert</button>
-    </form>
+        <!-- Convert Currency -->
+        <form>
+            <h2>Convert Currency</h2>
+            <div id="currency-convert" class="input-currency">
+                <input type="text" id="from-currency" placeholder="From (e.g., USD)" required>
+                <input type="text" id="to-currency" placeholder="From (e.g., EUR)" required>    
+            </div>
+            <input type="number" step="any" id="amount" placeholder="Amount" required>
+            <button id="convert">Convert</button>
+        </form>
+    </div>
 
     <!-- Market Watch Table -->
     <div id="market-watch">
-        <h2>Currency Rates</h2>
+        <h2>Market Watch</h2>
         <input type="search" id="search-rate" placeholder="Search currency..">
         <table id="rates-table">
             <thead>
@@ -50,5 +53,40 @@
         </table>
 
     </div>
+
+    <div class="firstDiv">
+        <!-- alert the user when the value reaches a specific point -->
+        <form>
+            <h2>Set Price Alert</h2>
+            <div id="alert-currency" class="input-currency">
+                <input type="text" id="first-currency" placeholder="From (e.g., USD)" required>
+                <input type="text" id="second-currency" placeholder="From (e.g., EUR)" required>
+            </div>
+            <input type="number" step="any" id="alert-rate" placeholder="Enter price to alert" required>
+            <button id="add-alert">Add price alert</button>
+        </form>
+
+        <!-- Price Change Tracker Table -->
+        <div id="tracker-table">
+            <h2>Price Change Tracker</h2>
+            <h5>(Daily Price Movement)</h5>
+            <table id="rates-table">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Rate</th>
+                        <th>ROC ⭡⭣</th>
+                    </tr>
+                </thead>
+                <tbody id="addTrackedCur">
+                    <!-- I will insert my Price Change Tracker here -->
+                </tbody>
+    
+            </table>
+        </div>
+    </div>
+</div>
+   
 </body>
 </html>

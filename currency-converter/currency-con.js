@@ -2,8 +2,13 @@ const clickAddRate = document.getElementById("add-rate");
 const clickConvert = document.getElementById("convert");
 const searchRate = document.getElementById("search-rate");
 const addNewRateTable = document.getElementById("addRateTable");
+const clickAddAlert = document.getElementById("add-alert");
+const addTrackerTable = document.getElementById("addTrackedCur");
 
 const marketWatch = [];
+const alertArray = [];
+const openPriceArr = [];
+const trackingPriceTable = [];
 
 
 function printTable(table){                    // This function refresh my rates table
@@ -64,7 +69,9 @@ clickAddRate.addEventListener("click", function(event){
 });
 
 
+
 // Convert currencies
+
 clickConvert.addEventListener("click", function(event){
     event.preventDefault(); // When I click on the button by default the browser will refresh the page so this line will cancel the default browser operation
     const firstCurrency = document.getElementById("from-currency");
@@ -99,7 +106,7 @@ clickConvert.addEventListener("click", function(event){
 });
 
 
-// Search for a currency pair
+// Search for firstCurValue currency pair
 
 // searchRate.addEventListener("keyup", function() {
 //     const searchValue = searchRate.value.toUpperCase().trim();
@@ -165,3 +172,113 @@ searchRate.addEventListener("keyup", () => {
     });
     printTable(matchingRates);
 });
+
+
+
+
+// Here we ara going to show an announcement when the market open or/and close
+
+setInterval(function(){
+    const timeNow = new Date();
+    if(timeNow.getHours() === 9 && timeNow.getMinutes() === 0){
+        alert("Market is open now..");
+        
+    }else if(timeNow.getHours() === 17 && timeNow.getMinutes() === 0){
+        alert("Market is close now..");
+    }
+}, 30000);
+
+
+
+// Here I'm going to create an alert table and set an alert if the price reaches the target
+
+clickAddAlert.addEventListener("click", function(event){
+    event.preventDefault();
+    const firstCurrencyId = document.getElementById("first-currency");
+    const firstCurAlert = firstCurrencyId.value.toUpperCase().trim();
+    const secondCurrencyId = document.getElementById("second-currency");
+    const secondCurAlert = secondCurrencyId.value.toUpperCase().trim();
+    const alertId = document.getElementById("alert-rate");
+    const alertValue = Number(alertId.value);
+
+    if (!firstCurAlert || !secondCurAlert || !alertValue) {      // here we check if all required fields are filled or not
+        alert("Please enter all required fields!");
+        return; 
+    }
+
+
+    if(alertArray.length > 0){
+        for(let i = 0; i < alertArray.length; i++){             // Here we checked if currency pair exists or not
+            if(alertArray[i][0] === firstCurAlert && alertArray[i][1] === secondCurAlert && alertArray[i][2] === alertValue){
+                alert("The currency pair exists..");
+                firstCurrencyId.value = "";
+                secondCurrencyId.value = "";
+                alertId.value = "";
+                return;
+            }
+        };
+    }   
+    alertArray.push([firstCurAlert, secondCurAlert, alertValue]);
+    firstCurrencyId.value = "";
+    secondCurrencyId.value = "";
+    alertId.value = "";
+});
+
+setInterval(function(){
+    for(let i = 0; i < alertArray.length; i++){     // Here we see if the price has reached to the target or not 
+        marketWatch.forEach((item) => {
+            const ratesAsArray = Object.entries(item.rates);
+            ratesAsArray.forEach((rate) => {
+                if(item.base === alertArray[i][0] && rate[0] === alertArray[i][1]){
+                    if(rate[1] >= alertArray[i][2]){
+                        alert(item.base + " " + rate[0] + " exchange rate has reached " + alertArray[i][2]);
+                        alertArray.splice(i, 1);
+                    }
+                }
+            });
+        }); 
+    };
+}, 1000);
+
+
+
+// Here we create a currency tracking table
+
+setInterval(function(){
+    const timeNow = new Date();
+    if(timeNow.getHours() === 9 && timeNow.getMinutes() === 0 && timeNow.getSeconds() === 0){      // Reset the opening price
+        openPriceArr.length = 0;
+        marketWatch.forEach(item => {
+            const ratesAsArray = Object.entries(item.rates);
+            ratesAsArray.forEach((rate) => {
+                openPriceArr.push([item.base, rate[0], rate[1]]);
+            });
+
+        });
+    }
+},500);
+
+setInterval(() => {
+        trackingPriceTable.length = 0;
+        for (let i = 0; i < openPriceArr.length; i++) {            // Here we are going to calculate the percentage of rates 
+            marketWatch.forEach((item) => {
+                if(item.base === openPriceArr[i][0]){
+                    const ratesArr = Object.entries(item.rates);
+                    ratesArr.forEach((rate) =>{
+                        if(rate[0] === openPriceArr[i][1]){
+                            const roc = ((rate[1] - openPriceArr[i][2]) / openPriceArr[i][2]) * 100;
+                            trackingPriceTable.push([item.base, rate[0], rate[1], roc]);
+                        }
+                    });
+                }
+            });
+        }
+        
+        addTrackerTable.innerHTML = "";
+        for (let i = 0; i < trackingPriceTable.length; i++) {    // Here print the table
+            const addTrackedRow = document.createElement("tr");
+            addTrackedRow.innerHTML = `<td>${trackingPriceTable[i][0]}</td><td>${trackingPriceTable[i][1]}</td><td>${trackingPriceTable[i][2]}</td><td>${trackingPriceTable[i][3].toFixed(2)} %</td>`;
+            addTrackerTable.appendChild(addTrackedRow);    
+        }
+}, 2000);
+
