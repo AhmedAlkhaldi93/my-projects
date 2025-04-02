@@ -10,6 +10,17 @@ const alertArray = [];
 const openPriceArr = [];
 const trackingPriceTable = [];
 
+setInterval(() => {
+    fetch("https://api.currencyfreaks.com/v2.0/rates/latest?apikey=0c25017fdad747739d3a5f98c37cf903")
+    .then(dataRow => dataRow.json())
+    .then(data => {
+        marketWatch.length = 0;
+        marketWatch.push(data);
+        printTable(marketWatch);
+        searchCurrency();
+    });
+},10000);
+
 
 function printTable(table){                    // This function refresh my rates table
     addNewRateTable.innerHTML = "";
@@ -49,7 +60,7 @@ clickAddRate.addEventListener("click", function(event){
             firstAddRateName.value = "";
             secondAddRateName.value = "";
             rateValue.value = "";
-            return printTable(marketWatch);
+            return  searchCurrency();
         }
     }
 
@@ -64,7 +75,7 @@ clickAddRate.addEventListener("click", function(event){
     firstAddRateName.value = "";
     secondAddRateName.value = "";
     rateValue.value = "";
-    return printTable(marketWatch);
+    return   searchCurrency();
 
 });
 
@@ -147,9 +158,9 @@ clickConvert.addEventListener("click", function(event){
 // });
 
 
-// Search rates using forEach()
 
-searchRate.addEventListener("keyup", () => {
+// Search rates using forEach()
+function searchCurrency(){
     const searchValue = searchRate.value.toUpperCase().trim();
 
     if (searchValue === "") {
@@ -171,7 +182,8 @@ searchRate.addEventListener("keyup", () => {
         })
     });
     printTable(matchingRates);
-});
+}
+searchRate.addEventListener("keyup", searchCurrency);
 
 
 
@@ -246,7 +258,7 @@ setInterval(function(){
 
 setInterval(function(){
     const timeNow = new Date();
-    if(timeNow.getHours() === 9 && timeNow.getMinutes() === 0 && timeNow.getSeconds() === 0){      // Reset the opening price
+    if(timeNow.getHours() === 0 && timeNow.getMinutes() === 39 && timeNow.getSeconds() === 0){      // Reset the opening price
         openPriceArr.length = 0;
         marketWatch.forEach(item => {
             const ratesAsArray = Object.entries(item.rates);
@@ -259,6 +271,7 @@ setInterval(function(){
 },500);
 
 setInterval(() => {
+    if(openPriceArr)
         trackingPriceTable.length = 0;
         for (let i = 0; i < openPriceArr.length; i++) {            // Here we are going to calculate the percentage of rates 
             marketWatch.forEach((item) => {
