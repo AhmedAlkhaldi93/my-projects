@@ -10,16 +10,7 @@ const alertArray = [];
 const openPriceArr = [];
 const trackingPriceTable = [];
 
-setInterval(() => {
-    fetch("https://api.currencyfreaks.com/v2.0/rates/latest?apikey=0c25017fdad747739d3a5f98c37cf903")
-    .then(dataRow => dataRow.json())
-    .then(data => {
-        marketWatch.length = 0;
-        marketWatch.push(data);
-        printTable(marketWatch);
-        searchCurrency();
-    });
-},10000);
+
 
 
 function printTable(table){                    // This function refresh my rates table
