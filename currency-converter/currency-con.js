@@ -7,13 +7,24 @@ const addTrackerTable = document.getElementById("addTrackedCur");
 
 const marketWatch = [];
 const alertArray = [];
-const openPriceArr = [];
+const openPriceArr = [];   // ex --> pushing  ["USD","EUR", 10]
 const trackingPriceTable = [];
 
 
+// Get updated rates form an external source  (using API)
+setInterval(() => {
+    fetch("https://api.currencyfreaks.com/v2.0/rates/latest?apikey=0c25017fdad747739d3a5f98c37cf903")
+    .then(dataRow => dataRow.json())
+    .then(data => {
+        marketWatch.length = 0;
+        marketWatch.push(data);
+        searchCurrency();
+    });
+},10000);
 
 
-function printTable(table){                    // This function refresh my rates table
+// This function refresh my rates table
+function printTable(table){
     addNewRateTable.innerHTML = "";
     for(let i=0; i < table.length; i++){
         const numberOfRates = Object.keys(table[i].rates).length;
@@ -249,7 +260,7 @@ setInterval(function(){
 
 setInterval(function(){
     const timeNow = new Date();
-    if(timeNow.getHours() === 0 && timeNow.getMinutes() === 39 && timeNow.getSeconds() === 0){      // Reset the opening price
+    if(timeNow.getHours() === 9 && timeNow.getMinutes() === 0 && timeNow.getSeconds() === 0){      // Reset the opening price
         openPriceArr.length = 0;
         marketWatch.forEach(item => {
             const ratesAsArray = Object.entries(item.rates);
