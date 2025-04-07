@@ -4,6 +4,9 @@ const searchRate = document.getElementById("search-rate");
 const addNewRateTable = document.getElementById("addRateTable");
 const clickAddAlert = document.getElementById("add-alert");
 const addTrackerTable = document.getElementById("addTrackedCur");
+const dialog = document.getElementById("boxAlert");
+const dialogText = document.getElementById("dialogText");
+
 
 const marketWatch = [];
 const alertArray = [];
@@ -51,8 +54,8 @@ clickAddRate.addEventListener("click", function(event){
 
 
     if (!text1 || !text2 || !rateValueIs) {      // here we check if all required fields are filled or not
-        alert("Please enter all required fields!");
-        return; 
+        const text = "Please enter all required fields!";
+        return openDialog(text);
     }
     
     for(let i=0; i < marketWatch.length; i++){   // check if the first currency is exist or not
@@ -95,8 +98,8 @@ clickConvert.addEventListener("click", function(event){
     const amount = Number(amountId.value);
 
     if (!firstCurValue || !secondCurValue || !amount) {      // here we check if all required fields are filled or not
-        alert("Please enter all required fields!");
-        return; 
+        const text = "Please enter all required fields!";
+        return openDialog(text);
     }
 
     for(let i=0; i < marketWatch.length; i++){
@@ -110,12 +113,13 @@ clickConvert.addEventListener("click", function(event){
                     firstCurrency.value = "";
                     secondCurrency.value = "";
                     amountId.value = "";
-                    return alert("The total amount is " + totalAmount + " " +key);
+                    const text = "The total amount is " + totalAmount.toFixed(3) + " " +key;
+                    return openDialog(text);
                 }
             }
         }
     }
-
+    
 });
 
 
@@ -195,10 +199,12 @@ searchRate.addEventListener("keyup", searchCurrency);
 setInterval(function(){
     const timeNow = new Date();
     if(timeNow.getHours() === 9 && timeNow.getMinutes() === 0){
-        alert("Market is open now..");
-        
+        const text = "Market is open now..";
+        return openDialog(text);
     }else if(timeNow.getHours() === 17 && timeNow.getMinutes() === 0){
-        alert("Market is close now..");
+        const text = "Market is close now..";
+        return openDialog(text);
+
     }
 }, 30000);
 
@@ -216,19 +222,19 @@ clickAddAlert.addEventListener("click", function(event){
     const alertValue = Number(alertId.value);
 
     if (!firstCurAlert || !secondCurAlert || !alertValue) {      // here we check if all required fields are filled or not
-        alert("Please enter all required fields!");
-        return; 
+        const text = "Please enter all required fields!";
+        return openDialog(text); 
     }
 
 
     if(alertArray.length > 0){
         for(let i = 0; i < alertArray.length; i++){             // Here we checked if currency pair exists or not
             if(alertArray[i][0] === firstCurAlert && alertArray[i][1] === secondCurAlert && alertArray[i][2] === alertValue){
-                alert("The currency pair exists..");
+                const text = "The currency pair exists..";
                 firstCurrencyId.value = "";
                 secondCurrencyId.value = "";
                 alertId.value = "";
-                return;
+                return openDialog(text);
             }
         };
     }   
@@ -245,7 +251,8 @@ setInterval(function(){
             ratesAsArray.forEach((rate) => {
                 if(item.base === alertArray[i][0] && rate[0] === alertArray[i][1]){
                     if(rate[1] >= alertArray[i][2]){
-                        alert(item.base + " " + rate[0] + " exchange rate has reached " + alertArray[i][2]);
+                        const text = item.base + " " + rate[0] + " exchange rate has reached " + alertArray[i][2];
+                        openDialog(text); 
                         alertArray.splice(i, 1);
                     }
                 }
@@ -260,7 +267,7 @@ setInterval(function(){
 
 setInterval(function(){
     const timeNow = new Date();
-    if(timeNow.getHours() === 9 && timeNow.getMinutes() === 0 && timeNow.getSeconds() === 0){      // Reset the opening price
+    if(timeNow.getHours() === 9 && timeNow.getMinutes() === 0){      // Reset the opening price
         openPriceArr.length = 0;
         marketWatch.forEach(item => {
             const ratesAsArray = Object.entries(item.rates);
@@ -270,7 +277,7 @@ setInterval(function(){
 
         });
     }
-},500);
+},30000);
 
 setInterval(() => {
     if(openPriceArr)
@@ -295,5 +302,10 @@ setInterval(() => {
             addTrackedRow.innerHTML = `<td>${trackingPriceTable[i][0]}</td><td>${trackingPriceTable[i][1]}</td><td>${trackingPriceTable[i][2]}</td><td>${trackingPriceTable[i][3].toFixed(2)} %</td>`;
             addTrackerTable.appendChild(addTrackedRow);    
         }
-}, 2000);
+}, 60000);
 
+
+function openDialog(text){         // this function to show the results inside box
+    dialogText.textContent = text;
+    dialog.show(); 
+  }

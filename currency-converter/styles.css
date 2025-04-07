@@ -110,3 +110,8 @@ thead{
 h5{
     margin: -15px 0 0 0;
 }
+
+#boxAlert{
+    width: 350px;
+    background-color: #ececec;
+}
