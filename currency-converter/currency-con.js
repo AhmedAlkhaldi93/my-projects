@@ -15,14 +15,15 @@ const trackingPriceTable = [];
 
 
 // Get updated rates form an external source  (using API)
+async function getRates() {
+    const dataRow = await fetch("https://api.currencyfreaks.com/v2.0/rates/latest?apikey=0c25017fdad747739d3a5f98c37cf903");
+    const data = await dataRow.json();
+    marketWatch.length = 0;
+    marketWatch.push(data);
+    searchCurrency();
+}
 setInterval(() => {
-    fetch("https://api.currencyfreaks.com/v2.0/rates/latest?apikey=0c25017fdad747739d3a5f98c37cf903")
-    .then(dataRow => dataRow.json())
-    .then(data => {
-        marketWatch.length = 0;
-        marketWatch.push(data);
-        searchCurrency();
-    });
+    getRates();
 },10000);
 
 
@@ -308,4 +309,4 @@ setInterval(() => {
 function openDialog(text){         // this function to show the results inside box
     dialogText.textContent = text;
     dialog.show(); 
-  }
+}

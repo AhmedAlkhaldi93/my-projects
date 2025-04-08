@@ -114,4 +114,24 @@ h5{
 #boxAlert{
     width: 350px;
     background-color: #ececec;
+    border-color: #ff0000;
+}
+
+#buttonAlert{
+    width: 150px;
+    padding: 10px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+#alertForm{
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    background-color: transparent;
+    box-shadow: none;
 }
