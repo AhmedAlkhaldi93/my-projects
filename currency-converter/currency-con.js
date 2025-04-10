@@ -18,12 +18,14 @@ const trackingPriceTable = [];
 async function getRates() {
     const dataRow = await fetch("https://api.currencyfreaks.com/v2.0/rates/latest?apikey=0c25017fdad747739d3a5f98c37cf903");
     const data = await dataRow.json();
+    console.log(data);
     marketWatch.length = 0;
     marketWatch.push(data);
-    searchCurrency();
 }
+
 setInterval(() => {
     getRates();
+    searchCurrency();
 },10000);
 
 
@@ -42,7 +44,7 @@ function printTable(table){
 }
 
 
-// How to Add New Currency Rate
+// Here add and change rates manually
 clickAddRate.addEventListener("click", function(event){
     event.preventDefault(); // When I click on the button by default the browser will refresh the page so this line will cancel the default browser operation
     const firstAddRateName = document.getElementById("currency-from");
@@ -82,7 +84,6 @@ clickAddRate.addEventListener("click", function(event){
     secondAddRateName.value = "";
     rateValue.value = "";
     return   searchCurrency();
-
 });
 
 
