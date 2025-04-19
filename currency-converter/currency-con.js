@@ -44,7 +44,7 @@ function printTable(table){
 }
 
 
-// Here add and change rates manually
+// Here add OR change rates manually
 clickAddRate.addEventListener("click", function(event){
     event.preventDefault(); // When I click on the button by default the browser will refresh the page so this line will cancel the default browser operation
     const firstAddRateName = document.getElementById("currency-from");
@@ -63,7 +63,7 @@ clickAddRate.addEventListener("click", function(event){
     
     for(let i=0; i < marketWatch.length; i++){   // check if the first currency is exist or not
         if(marketWatch[i].base === text1){   
-            marketWatch[i].rates[text2] = rateValueIs;
+            marketWatch[i].rates[text2] = rateValueIs;       // This is how to add a new rate or update it if it exists
             // Here is how to reset the input fields to be empty
             firstAddRateName.value = "";
             secondAddRateName.value = "";
@@ -76,7 +76,7 @@ clickAddRate.addEventListener("click", function(event){
         base : text1,
         date : theDate,
         rates : {
-            [secondAddRateName.value.toUpperCase()] : rateValueIs,
+            [text2] : rateValueIs,
         }
     });
     // Here is how to reset the input fields to be empty
