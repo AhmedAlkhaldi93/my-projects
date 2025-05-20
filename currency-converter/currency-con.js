@@ -269,7 +269,7 @@ setInterval(function(){
 
 setInterval(function(){
     const timeNow = new Date();
-    if(timeNow.getHours() === 9 && timeNow.getMinutes() === 0){      // Reset the opening price
+    if(timeNow.getHours() === 12 && timeNow.getMinutes() === 13){      // Reset the opening price
         openPriceArr.length = 0;
         marketWatch.forEach(item => {
             const ratesAsArray = Object.entries(item.rates);
@@ -304,7 +304,7 @@ setInterval(() => {
             addTrackedRow.innerHTML = `<td>${trackingPriceTable[i][0]}</td><td>${trackingPriceTable[i][1]}</td><td>${trackingPriceTable[i][2]}</td><td>${trackingPriceTable[i][3].toFixed(2)} %</td>`;
             addTrackerTable.appendChild(addTrackedRow);    
         }
-}, 60000);
+}, 1000);
 
 
 function openDialog(text){         // this function to show the results inside box
