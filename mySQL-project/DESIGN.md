@@ -121,3 +121,8 @@ In this section you should answer the following questions:
 * What might your database not be able to represent very well?
 
   It is not possible to track the order modification history.
+
+
+## Files required
+- [schema.sql](https://gist.github.com/AhmedAlkhaldi93/90a9761b00784d14f37148a091dcd1a4)
+- [queries.sql](https://gist.github.com/AhmedAlkhaldi93/1a18a74ecd8ca803b54edf2b9d9789b1)
